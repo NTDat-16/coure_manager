@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { getCourses,getCourseById,createNewCourse,updateCourse,deleteCourse } from '../controllers/course.controllers.js';
-
+import {validate} from '../middlewares/validate.middlewares.js';
+import {createCourseValidator} from '../validators/courses.validators.js';
 const router = Router();
 router.get('/', getCourses);
 router.get('/:id', getCourseById);
-router.post('/', createNewCourse);
-router.put('/:id', updateCourse);
+router.post("/",createCourseValidator, validate, createNewCourse);
+router.put('/:id', createCourseValidator, validate, updateCourse);
 router.delete('/:id', deleteCourse);
 export default router;
