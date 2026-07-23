@@ -7,7 +7,7 @@ import {
     updateStudent,
     deleteStudent,
 } from "../controllers/student.controllers.js";
-
+import { authenticateToken } from "../middlewares/auth.middlewares.js";
 import { validate } from "../middlewares/validate.middlewares.js";
 
 import {
@@ -21,19 +21,19 @@ router.get("/", getStudents);
 router.get("/:id", getStudentById);
 
 router.post(
-    "/",
+    "/",authenticateToken,
     createStudentValidator,
     validate,
     createStudent
 );
 
 router.put(
-    "/:id",
+    "/:id",authenticateToken,
     createStudentValidator,
     validate,
     updateStudent
 );
 
-router.delete("/:id", deleteStudent);
+router.delete("/:id",authenticateToken, deleteStudent);
 
 export default router;
