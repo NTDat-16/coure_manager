@@ -1,5 +1,40 @@
 import pool from '../config/database.js';
 
+export async function getCourses(
+    page: number,
+    limit: number,
+    keyword: string
+) {
+    const offset = (page - 1) * limit;
+
+    const result = await pool.query(
+        `
+        SELECT *
+        FROM courses
+        WHERE title ILIKE $1
+        ORDER BY id
+        LIMIT $2
+        OFFSET $3
+        `,
+        [`%${keyword}%`, limit, offset]
+    );
+
+    return result.rows;
+}
+
+export async function countCourses(keyword: string) {
+    const result = await pool.query(
+        `
+        SELECT COUNT(*) AS total
+        FROM courses
+        WHERE title ILIKE $1
+        `,
+        [`%${keyword}%`]
+    );
+
+    return Number(result.rows[0].total);
+}
+
 export async function getAllCourses() {
     const result = await pool.query(`
         SELECT *
